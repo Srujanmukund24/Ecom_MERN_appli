@@ -26,6 +26,10 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(cookieParser());
 
 
+//routes for the Application:
+app.use("/api/auth",require("./routes/authRoutes"));
+
+
 
 // Applicatino is listening on the particular port.
 app.listen(port, () => {
