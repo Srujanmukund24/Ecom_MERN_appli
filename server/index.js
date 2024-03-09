@@ -28,7 +28,8 @@ app.use(cookieParser());
 
 //routes for the Application:
 app.use("/api/auth",require("./routes/authRoutes"));
-
+app.use("/api/user",require("./routes/userRoutes"));
+app.use("/api/retailer",require("./routes/retailerRoutes"));
 
 
 // Applicatino is listening on the particular port.

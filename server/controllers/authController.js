@@ -87,6 +87,18 @@ const userLoginController=async (req,res)=>{
          console.log("err in user login",err);    
       }
 };
+const logoutController = async (req, res) => {
+    try {
+        // Clear the JWT token from the client's cookies
+        res.clearCookie("jwt", { httpOnly: true, secure: true });
+
+        // Send a success message
+        res.status(200).json({ message: "Logged out successfully" });
+    } catch (err) {
+        console.error("Error in logoutController:", err);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
 
 const retailerRegisterController = async (req, res) => {
     try {
@@ -170,5 +182,4 @@ const retailerLoginController = async (req, res) => {
     }
 };
 
-
-module.exports ={ userRegisterController, userLoginController,retailerRegisterController,retailerLoginController}
+module.exports ={ userRegisterController, userLoginController,retailerRegisterController,retailerLoginController,logoutController}
