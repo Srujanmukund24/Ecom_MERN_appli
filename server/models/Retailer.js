@@ -17,9 +17,6 @@ const retailerSchema = mongoose.Schema({
     phone: {
         type: String,
         required: true
-    },
-    token: {
-        type: String
     }
 });
 

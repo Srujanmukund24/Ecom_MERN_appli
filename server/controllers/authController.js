@@ -38,16 +38,15 @@ const userRegisterController=async (req,res)=>{
             },
             process.env.TOKEN_KEY,
             {
-                expiresIn:"10h",
+                expiresIn:"365d",
             }
         );
 
-        ;//attach token to user
-        user.token=token;
-        res.status(201).json({message:"User Registered successfullty",user})
-    }
-    catch(err){
-        console.log("error in user register",err);
+        //attach token to user
+        res.status(201).json({ message: "User registered successfully", token });
+    } catch (err) {
+        console.log("Error in user register", err);
+        res.status(500).send("Internal Server Error");
     }
 };
 
@@ -71,27 +70,22 @@ const userLoginController=async (req,res)=>{
             const token=jwt.sign({user_id:user._id,email},
                   process.env.TOKEN_KEY,
                   {
-                    expiresIn:"10h",
+                    expiresIn:"365d",
                   }
             )
-            res.cookie("jwt",token,{httpOnly:true,secure:true,maxAvg:60000})
-            user.token=token;
-            return res.status(200).json({message:" User Loged in Successfully",user})
-          }
-          else{
-            return res.status(400).send("Invalied Credential for  User login");
-          }
-      }
-      catch(err){
-          res.status(500).send("Server erroe at user login");
-         console.log("err in user login",err);    
-      }
+            return res.status(200).json({ message: "User Logged in Successfully", token });
+        } else {
+            return res.status(400).send("Invalid credentials for User login");
+        }
+    } catch (err) {
+        console.log("Error in user login", err);
+        return res.status(500).send("Server error at user login");
+    }
 };
 const logoutController = async (req, res) => {
     try {
-        // Clear the JWT token from the client's cookies
-        res.clearCookie("jwt", { httpOnly: true, secure: true });
-
+        
+        // will have to handle this in the client side and remove the token front he loacl storage...
         // Send a success message
         res.status(200).json({ message: "Logged out successfully" });
     } catch (err) {
@@ -134,13 +128,12 @@ const retailerRegisterController = async (req, res) => {
             },
             process.env.TOKEN_KEY,
             {
-                expiresIn: "10h",
+                expiresIn: "365d",
             }
         );
 
         // Attach token to retailer
-        retailer.token = token;
-        res.status(201).json({ message: "Retailer registered successfully", retailer });
+        res.status(201).json({ message: "Retailer registered successfully", token });
     } catch (err) {
         console.log("Error in retailer register", err);
         res.status(500).send("Internal Server Error");
@@ -167,12 +160,10 @@ const retailerLoginController = async (req, res) => {
             const token = jwt.sign({ retailer_id: retailer._id, email },
                 process.env.TOKEN_KEY,
                 {
-                    expiresIn: "10h",
+                    expiresIn: "365d",
                 }
             );
-            res.cookie("jwt", token, { httpOnly: true, secure: true, maxAge: 60000 });
-            retailer.token = token;
-            return res.status(200).json({ message: "Retailer Logged in Successfully", retailer });
+            return res.status(200).json({ message: "Retailer Logged in Successfully", token });
         } else {
             return res.status(400).send("Invalid credentials for Retailer login");
         }

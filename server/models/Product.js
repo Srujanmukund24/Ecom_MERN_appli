@@ -28,7 +28,7 @@ const productSchema = mongoose.Schema({
     },
     availability: {
         type: String,
-        enum: ['instock', 'outofstock', 'limited'],
+        enum: ['inStock', 'outOfStock', 'limited'],
         default: 'instock'
     },
     photo: {
