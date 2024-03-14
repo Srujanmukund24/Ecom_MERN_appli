@@ -61,7 +61,59 @@ const addProductController = async (req, res) => {
     }
 };
 
-module.exports = addProductController;
+const updateProductController = async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const { productName, price, category, description, quantity, availability, photo } = req.body;
 
+        // Check if the productId is valid
+        if (!productId) {
+            return res.status(400).json({ message: "Product ID is required" });
+        }
 
-module.exports={getCurrentRetailer,addProductController};
+        // Update product
+        const updatedProduct = await Product.findByIdAndUpdate(productId, {
+            productName,
+            price,
+            category,
+            description,
+            quantity,
+            availability,
+            photo
+        }, { new: true }); // Set { new: true } to return the updated document
+
+        if (!updatedProduct) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        return res.status(200).json({ message: "Product updated successfully", product: updatedProduct });
+    } catch (err) {
+        console.error("Error in update product controller:", err);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+const deleteProductController = async (req, res) => {
+    try {
+        const { productId } = req.params;
+
+        // Check if the productId is provided
+        if (!productId) {
+            return res.status(400).json({ message: "Product ID is required" });
+        }
+
+        // Find the product by productId and delete it
+        const deletedProduct = await Product.findByIdAndDelete(productId);
+
+        // Check if the product is found and deleted successfully
+        if (!deletedProduct) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        return res.status(200).json({ message: "Product deleted successfully", product: deletedProduct });
+    } catch (err) {
+        console.error("Error in delete product controller:", err);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+module.exports={getCurrentRetailer,addProductController,updateProductController,deleteProductController};
